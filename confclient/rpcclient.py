@@ -80,12 +80,10 @@ class RPCClient:
             raise BadRPCRequestException(
                 f"Error: Status Code {response.status_code} Encountered,\n{response.text}"
             )
-        
+
         if "error" in response.json():
-            error = response.json()['error']
-            raise BadRPCRequestException(
-                f"Error ({error['code']}): {error['message']}"
-            )
+            error = response.json()["error"]
+            raise BadRPCRequestException(f"Error ({error['code']}): {error['message']}")
 
         return response
 

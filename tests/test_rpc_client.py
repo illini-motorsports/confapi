@@ -13,7 +13,7 @@ def rpc_client():
 
 
 def test_rpc_add_user_good(rpc_client: RPCClient):
-    
+
     resp = rpc_client.add_user("test_user_123", "Test User", "test@testuser.com")
 
     assert resp.status_code == 200
@@ -30,7 +30,7 @@ def test_rpc_remove_user_good(rpc_client: RPCClient):
     resp = rpc_client.remove_user("test_user_123")
 
     assert resp.status_code == 200
-    
+
 
 def test_rpc_remove_user_bad(rpc_client: RPCClient):
 
