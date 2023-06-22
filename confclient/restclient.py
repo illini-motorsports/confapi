@@ -27,7 +27,7 @@ class RestClient:
 
         return response
 
-    def getUsersInGroup(self, groupname: str, **params) -> dict:
+    def get_users_in_group(self, groupname: str, **params) -> dict:
         res = self._execute(f"/group/{groupname}/member", params=params).json()
 
         return {
@@ -41,20 +41,20 @@ class RestClient:
             ]
         }
 
-    def getGroups(self, **params) -> dict:
+    def get_groups(self, **params) -> dict:
         res = self._execute("/group", params=params).json()
 
-        return {
+        return {    
             "groups": [
                 {
                     "groupname": i["name"],
                     "link": i["_links"]["self"],
                 }
-                for i in res["results"]
+                for i in res["results"] 
             ],
             "start": res["start"],
             "limit": res["limit"],
         }
 
-    def getAllUsers(self, limit: int, start: int) -> dict:
-        return self.getUsersInGroup("confluence-users", limit=limit, start=start)
+    def get_all_users(self, limit: int, start: int) -> dict:
+        return self.get_users_in_group("confluence-users", limit=limit, start=start)
