@@ -27,4 +27,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Test with pytest
         run: |
+          export CONF_URL=${{ secrets.CONF_URL }}
+          export CONF_USER=${{ secrets.CONF_USER }}
+          export CONF_PASS=${{ secrets.CONF_PASS }}
           python -m pytest tests
