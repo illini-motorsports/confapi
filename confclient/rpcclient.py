@@ -76,10 +76,11 @@ class RPCClient:
         )
 
         # Ensure non-failed request, fail hard and fast
-        if response.status_code != 200:
-            raise BadRPCRequestException(
-                f"Error: Status Code {response.status_code} Encountered,\n{response.text}"
-            )
+        # UPDATE: RPC always returns 200 status code
+        # if response.status_code != 200:
+        #     raise BadRPCRequestException(
+        #         f"Error: Status Code {response.status_code} Encountered,\n{response.text}"
+        #     )
 
         if "error" in response.json():
             error = response.json()["error"]
@@ -207,4 +208,4 @@ class RPCClient:
             RPC API request response
         """
 
-        return self._execute("removeGroup", [group])
+        return self._execute("removeGroup", [group, ""])
