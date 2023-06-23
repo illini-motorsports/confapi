@@ -85,7 +85,6 @@ class RPCClient:
         if "error" in response.json():
             error = response.json()["error"]
             raise BadRPCRequestException(f"Error ({error['code']}): {error['message']}")
-            
 
         return response
 
