@@ -67,3 +67,39 @@ def test_rpc_remove_group_good(rpc_client: RPCClient, rest_client: RestClient):
     groups = [g["groupname"] for g in rest_client.get_groups()["groups"]]
 
     assert "test_group_123" not in groups
+
+
+# TODO: Figure out how to determine if a delete group fails, response doesn't seem to differ
+# def test_rpc_remove_group_bad(rpc_client: RPCClient, rest_client: RestClient):
+
+#     rpc_client.remove_group("test_group_123")
+
+#     groups = [g["groupname"] for g in rest_client.get_groups()["groups"]]
+
+#     assert "test_group_123" not in groups
+
+
+def test_rpc_add_user_to_group(rpc_client: RPCClient, rest_client: RestClient):
+
+    rpc_client.add_user("test_user_123", "Test User", "test@testuser.com")
+
+    rpc_client.add_group("test_group_123")
+
+    rpc_client.add_user_to_group("test_user_123", "test_group_123")
+
+    resp = rest_client.get_users_in_group("test_group_123")
+
+    assert "test_user_123" in [u["username"] for u in resp["users"]]
+
+
+def test_rpc_remove_user_from_group(rpc_client: RPCClient, rest_client: RestClient):
+
+    rpc_client.remove_user_from_group("test_user_123", "test_group_123")
+
+    resp = rest_client.get_users_in_group("test_group_123")
+
+    assert "test_user_123" not in [u["username"] for u in resp["users"]]
+
+    # Clean up
+    rpc_client.remove_user("test_user_123")
+    rpc_client.remove_group("test_group_123")
