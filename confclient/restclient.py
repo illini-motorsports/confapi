@@ -1,3 +1,18 @@
+"""
+Copyright (c) 2023 Collin Meyer
+
+REST API client for interacting with Atlassian Confluence
+
+Description of how these API's work can be found here:
+https://developer.atlassian.com/server/confluence/confluence-json-rpc-apis/
+
+API Methods can be found here:
+https://developer.atlassian.com/server/confluence/remote-confluence-methods/
+
+API Data Objects can be found here:
+https://developer.atlassian.com/server/confluence/remote-confluence-data-objects/
+"""
+
 import requests
 
 from confclient.confexcept import BadRestRequestException
@@ -11,12 +26,20 @@ REST_ENDPOINT = "/rest/api"
 
 
 class RestClient:
+    """Rest client for interacting with confluence
+    
+    Attributes:
+        url: Base Url of Confluence server, e.g. https://my.confluence.server.com
+        username: str = Username of Confluence user with administrator privelege
+        password: str = Password of Confluence user with administrator privelege
+                NOTE: Many functionalities will fail without administrator privelege!
+    """
     def __init__(self, url, username, password):
         self.url = url
         self.username = username
         self.password = password
 
-    def _execute(
+    def _execute_rest(
         self, api_path: str, data: dict = None, params: dict = None
     ) -> requests.Response:
         response = requests.get(
@@ -35,7 +58,7 @@ class RestClient:
         return response
 
     def get_users_in_group(self, groupname: str, **params) -> dict:
-        res = self._execute(f"/group/{groupname}/member", params=params).json()
+        res = self._execute_rest(f"/group/{groupname}/member", params=params).json()
 
         return {
             "users": [
@@ -49,7 +72,7 @@ class RestClient:
         }
 
     def get_groups(self, **params) -> dict:
-        res = self._execute("/group", params=params).json()
+        res = self._execute_rest("/group", params=params).json()
 
         return {    
             "groups": [

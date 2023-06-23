@@ -31,7 +31,7 @@ class RPCClient:
     """RPCClient for interacting with Confluence
 
     Attributes:
-        url: str = Base Url of Confluence server, E.G https://my.confluence.server.com
+        url: str = Base Url of Confluence server, e.g. https://my.confluence.server.com
         username: str = Username of Confluence user with administrator privelege
         password: str = Password of Confluence user with administrator privelege
                 NOTE: Many functionalities will fail without administrator privelege!
@@ -42,12 +42,12 @@ class RPCClient:
 
         See argument explanations above
         """
-        self.url = url + RPC_ENDPOINT
+        self.url = url
         self.username = username
         self.password = password
         self.version = version
 
-    def _execute(
+    def _execute_rpc(
         self, method: str, params: list[str | dict | bool]
     ) -> requests.Response:
         """Preform API call to endpoint
@@ -69,7 +69,7 @@ class RPCClient:
         }
 
         response = requests.post(
-            self.url,
+            self.url + RPC_ENDPOINT,
             json=data,
             auth=requests.auth.HTTPBasicAuth(self.username, self.password),
             timeout=10,
@@ -85,6 +85,7 @@ class RPCClient:
         if "error" in response.json():
             error = response.json()["error"]
             raise BadRPCRequestException(f"Error ({error['code']}): {error['message']}")
+            
 
         return response
 
@@ -117,7 +118,7 @@ class RPCClient:
             RPC API request response
         """
 
-        return self._execute(
+        return self._execute_rpc(
             "addUser",
             [
                 {"name": username, "fullname": fullname, "email": email},
@@ -142,7 +143,7 @@ class RPCClient:
             RPC API request response
         """
 
-        return self._execute("removeUser", [username])
+        return self._execute_rpc("removeUser", [username])
 
     def add_user_to_group(self, username: str, group: str) -> requests.Response:
         """Invoke RPC endpoint for adding user to a group in Confluence
@@ -159,7 +160,7 @@ class RPCClient:
             RPC API request response
         """
 
-        return self._execute("addUserToGroup", [username, group])
+        return self._execute_rpc("addUserToGroup", [username, group])
 
     def remove_user_from_group(self, username: str, group: str) -> requests.Response:
         """Invoke RPC endpoint for removing a user form a group in Confluence
@@ -176,7 +177,7 @@ class RPCClient:
             RPC API request response
         """
 
-        return self._execute("removeUserFromGroup", [username, group])
+        return self._execute_rpc("removeUserFromGroup", [username, group])
 
     def add_group(self, group):
         """Invoke RPC endpoint for creating a new group in Confluence
@@ -192,7 +193,7 @@ class RPCClient:
             RPC API request response
         """
 
-        return self._execute("addGroup", [group])
+        return self._execute_rpc("addGroup", [group])
 
     def remove_group(self, group):
         """Invoke RPC endpoint for removing group in Confluence
@@ -208,4 +209,4 @@ class RPCClient:
             RPC API request response
         """
 
-        return self._execute("removeGroup", [group, ""])
+        return self._execute_rpc("removeGroup", [group, ""])
