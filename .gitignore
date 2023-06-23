@@ -162,3 +162,5 @@ cython_debug/
 tests/conf_test.yml
 
 .DS_Store
+
+test_script.py

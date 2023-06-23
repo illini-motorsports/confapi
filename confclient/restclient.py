@@ -3,6 +3,13 @@ import requests
 from confclient.confexcept import BadRestRequestException
 
 
+# ---------------------- CONSTANTS ----------------------
+
+REST_ENDPOINT = "/rest/api"
+
+# ----------------- Class Definitions -------------------
+
+
 class RestClient:
     def __init__(self, url, username, password):
         self.url = url
@@ -13,7 +20,7 @@ class RestClient:
         self, api_path: str, data: dict = None, params: dict = None
     ) -> requests.Response:
         response = requests.get(
-            self.url + api_path,
+            self.url + REST_ENDPOINT + api_path,
             json=data,
             params=params,
             auth=requests.auth.HTTPBasicAuth(self.username, self.password),

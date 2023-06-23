@@ -207,4 +207,4 @@ class RPCClient:
             RPC API request response
         """
 
-        return self._execute("removeGroup", [group])
+        return self._execute("removeGroup", [group, ""])
